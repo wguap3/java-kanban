@@ -1,3 +1,11 @@
+package Main;
+
+import Main.Manager.TaskManager;
+import Main.Task.Epic;
+import Main.Task.Subtask;
+import Main.Task.Task;
+import Main.Task.TaskStatus;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();
@@ -12,17 +20,17 @@ public class Main {
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
 
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", null,epic1.getEpicId(), TaskStatus.DONE);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", null,epic1.getId(), TaskStatus.DONE);
         taskManager.addSubtask(subtask1);
 
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", null, epic1.getEpicId(), TaskStatus.NEW);
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", null, epic1.getId(), TaskStatus.NEW);
         taskManager.addSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", null,epic2.getEpicId(), TaskStatus.NEW);
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", null,epic2.getId(), TaskStatus.NEW);
         taskManager.addSubtask(subtask3);
 
-        taskManager.updateStatus(epic1.getEpicId());
-        taskManager.updateStatus(epic2.getEpicId());
+        //taskManager.updateStatus(epic1.getId());
+        //taskManager.updateStatus(epic2.getId());
 
         System.out.println("Tasks:");
         System.out.println(taskManager.getAllTasks());
@@ -51,8 +59,8 @@ public class Main {
 
         subtask3.setStatus(TaskStatus.DONE);
         taskManager.updateSubtask(subtask3);
-        taskManager.updateStatus(epic1.getEpicId());
-        taskManager.updateStatus(epic2.getEpicId());
+        //taskManager.updateStatus(epic1.getId());
+        //taskManager.updateStatus(epic2.getId());
         System.out.println("Tasks(update):");
         System.out.println(taskManager.getAllTasks());
 
@@ -66,7 +74,7 @@ public class Main {
         System.out.println("Tasks(remove):");
         System.out.println(taskManager.getAllTasks());
 
-        taskManager.removeEpic(epic1.getEpicId());
+        taskManager.removeEpic(epic1.getId());
         System.out.println("Epics(remove):");
         System.out.println(taskManager.getAllEpic());
 

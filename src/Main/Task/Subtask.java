@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+package Main.Task;
 
 public class Subtask extends Task {
     private Integer epicId;
@@ -15,9 +15,9 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "name='" + name + '\'' +
-                ", describe='" + describe + '\'' +
+        return "Main.Task.Subtask{" +
+                "name='" + getName() + '\'' +
+                ", describe='" + getDescribe() + '\'' +
                 ", id=" + getId() +
                 ", idEpic=" + getEpicId() +
                 ", status=" + getStatus() +
