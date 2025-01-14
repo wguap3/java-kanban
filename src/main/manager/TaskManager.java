@@ -1,9 +1,9 @@
-package Main.Manager;
+package main.manager;
 
-import Main.Task.Epic;
-import Main.Task.Subtask;
-import Main.Task.Task;
-import Main.Task.TaskStatus;
+import main.task.Epic;
+import main.task.Subtask;
+import main.task.Task;
+import main.task.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class TaskManager {
     private int count = 0;
     private HashMap<Integer, Task> tasks = new HashMap<>();
-    private  HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
 
     private int generateId() {
@@ -35,7 +35,7 @@ public class TaskManager {
         int id = generateId();
         subtask.setId(id);
         subtasks.put(id, subtask);
-        epic.addSubtaskId(subtask.getId());//сделай метод
+        epic.addSubtaskId(subtask.getId());
         updateStatus(epicId);
         return id;
     }
@@ -190,8 +190,6 @@ public class TaskManager {
             epic.setStatus(TaskStatus.NEW);
         }
     }
-
-
 }
 
 

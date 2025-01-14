@@ -1,10 +1,10 @@
-package Main;
-
-import Main.Manager.TaskManager;
-import Main.Task.Epic;
-import Main.Task.Subtask;
-import Main.Task.Task;
-import Main.Task.TaskStatus;
+package main;
+// как дожен называться главный пакет?
+import main.manager.TaskManager;
+import main.task.Epic;
+import main.task.Subtask;
+import main.task.Task;
+import main.task.TaskStatus;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,9 +28,6 @@ public class Main {
 
         Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", null,epic2.getId(), TaskStatus.NEW);
         taskManager.addSubtask(subtask3);
-
-        //taskManager.updateStatus(epic1.getId());
-        //taskManager.updateStatus(epic2.getId());
 
         System.out.println("Tasks:");
         System.out.println(taskManager.getAllTasks());
@@ -59,8 +56,7 @@ public class Main {
 
         subtask3.setStatus(TaskStatus.DONE);
         taskManager.updateSubtask(subtask3);
-        //taskManager.updateStatus(epic1.getId());
-        //taskManager.updateStatus(epic2.getId());
+
         System.out.println("Tasks(update):");
         System.out.println(taskManager.getAllTasks());
 
