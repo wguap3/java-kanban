@@ -1,5 +1,9 @@
 package main.task;
 
+import main.manager.HistoryManager;
+import main.manager.Managers;
+import main.manager.TaskManager;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -7,6 +11,15 @@ public class Epic extends Task {
 
     public Epic(String name, String describe, Integer id, TaskStatus status) {
         super(name, describe, id, null);
+    }
+
+    private Epic(String name, String describe, Integer id, TaskStatus status, ArrayList<Integer> subtaskIds) {
+        super(name, describe, id, status);
+        this.subtaskIds = subtaskIds;
+    }
+
+    public Epic getShapshot() {
+        return new Epic(this.getName(), this.getDescribe(), this.getId(), this.getStatus(), this.subtaskIds);
     }
 
     public void addSubtask(int subtaskId) {
@@ -25,20 +38,17 @@ public class Epic extends Task {
         subtaskIds.remove(subtaskId);
     }
 
-    public void cleanSubtaskIds (){
+    public void cleanSubtaskIds() {
         subtaskIds.clear();
     }
 
-    public void addSubtaskId(int id){
+    public void addSubtaskId(int id) {
         subtaskIds.add(id);
     }
 
-
-
-
     @Override
     public String toString() {
-        return "Main.Task.Epic{" +
+        return "Epic{" +
                 "name='" + getName() + '\'' +
                 ", describe='" + getDescribe() + '\'' +
                 ", id=" + getId() +
@@ -46,6 +56,4 @@ public class Epic extends Task {
                 ", subtask" + subtaskIds.toString() +
                 '}';
     }
-
-
 }

@@ -15,6 +15,10 @@ public class Task {
         this.status = status;
     }
 
+    public Task getShapshot() {
+        return new Task(this.name, this.describe, this.id, this.status);
+    }
+
     public String getName() {
         return name;
     }
@@ -53,7 +57,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Main.Task.Task{" +
+        return "Task{" +
                 "name='" + name + '\'' +
                 ", describe='" + describe + '\'' +
                 ", id=" + id +
@@ -62,41 +66,39 @@ public class Task {
     }
 
     @Override
-    public boolean equals(Object obj){
-        if(this == obj) return true;
-        if(obj == null) return false;
-        if(this.getClass() != obj.getClass()) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
         Task otherTask = (Task) obj;
-        return  Objects.equals(name, otherTask.name) &&
+        return Objects.equals(name, otherTask.name) &&
                 Objects.equals(describe, otherTask.describe) &&
                 Objects.equals(id, otherTask.id) &&
                 Objects.equals(status, otherTask.status);
     }
 
     @Override
-    public  int hashCode(){
+    public int hashCode() {
         int hash = 17;
-        if(name != null){
+        if (name != null) {
             hash = hash + name.hashCode();
         }
         hash = hash * 31;
 
-        if(describe != null){
+        if (describe != null) {
             hash = hash + describe.hashCode();
         }
         hash = hash * 31;
 
-        if(id != null){
+        if (id != null) {
             hash = hash + id.hashCode();
         }
         hash = hash * 31;
 
-        if(id != null){
+        if (id != null) {
             hash = hash + status.hashCode();
         }
         return hash;
 
     }
-
-
 }

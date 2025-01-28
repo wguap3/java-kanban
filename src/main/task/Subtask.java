@@ -8,6 +8,10 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public Subtask getShapshot() {
+        return new Subtask(this.getName(), this.getDescribe(), this.getId(), this.getEpicId(), this.getStatus());
+    }
+
     public Integer getEpicId() {
         return epicId;
     }
@@ -15,7 +19,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Main.Task.Subtask{" +
+        return "Subtask{" +
                 "name='" + getName() + '\'' +
                 ", describe='" + getDescribe() + '\'' +
                 ", id=" + getId() +
