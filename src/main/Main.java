@@ -15,6 +15,7 @@ public class Main {
         Task task4 = new Task("Задача 4", "Описание задачи 4", null, TaskStatus.IN_PROGRESS);
         Task task5 = new Task("Задача 5", "Описание задачи 5", null, TaskStatus.DONE);
         Task task6 = new Task("Задача 6", "Описание задачи 6", null, TaskStatus.IN_PROGRESS);
+        Task task7 = new Task("Задача 7", "Описание задачи 6", 1, TaskStatus.IN_PROGRESS);
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.addTask(task3);
@@ -47,6 +48,8 @@ public class Main {
         taskManager.getIdTask(6);
         taskManager.getIdTask(1);
         taskManager.getIdTask(2);
+        taskManager.getIdTask(1);
+        taskManager.updateTask(task7);
         taskManager.getIdTask(1);
         System.out.println("История:");
         for (Task task : taskManager.getHistory()) {

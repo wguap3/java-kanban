@@ -15,10 +15,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task getShapshot() {
-        return new Task(this.name, this.describe, this.id, this.status);
-    }
-
     public String getName() {
         return name;
     }

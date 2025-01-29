@@ -8,10 +8,6 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    public Subtask getShapshot() {
-        return new Subtask(this.getName(), this.getDescribe(), this.getId(), this.getEpicId(), this.getStatus());
-    }
-
     public Integer getEpicId() {
         return epicId;
     }

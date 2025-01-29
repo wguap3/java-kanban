@@ -18,10 +18,6 @@ public class Epic extends Task {
         this.subtaskIds = subtaskIds;
     }
 
-    public Epic getShapshot() {
-        return new Epic(this.getName(), this.getDescribe(), this.getId(), this.getStatus(), this.subtaskIds);
-    }
-
     public void addSubtask(int subtaskId) {
         subtaskIds.add(subtaskId);
     }
