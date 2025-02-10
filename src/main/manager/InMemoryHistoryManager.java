@@ -7,22 +7,23 @@ import java.util.*;
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final List<Task> historyStorage = new ArrayList<>();
-    private final Map<Integer,Node<Task>> tasks = new HashMap<>();
+    private final Map<Integer, Node<Task>> tasks = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
+
     @Override
     public void addTask(Task task) {
         if (task == null) {
             return;
         }
-        if(tasks.containsKey(task.getId())) {
+        if (tasks.containsKey(task.getId())) {
             removeNode(tasks.get(task.getId()));
         }
-            linkLast(task);
-            tasks.put(task.getId(), tail);
+        linkLast(task);
+        tasks.put(task.getId(), tail);
 
-            historyStorage.clear();
-            historyStorage.addAll(getTasks());
+        historyStorage.clear();
+        historyStorage.addAll(getTasks());
 
     }
 
@@ -33,7 +34,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        if(tasks.containsKey(id)){
+        if (tasks.containsKey(id)) {
             removeNode(tasks.get(id));
             tasks.remove(id);
             historyStorage.clear();
@@ -44,23 +45,23 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     }
 
-    public void linkLast(Task task){
+    public void linkLast(Task task) {
         Node<Task> newNode = new Node<>(task);
-        if(tail == null){
+        if (tail == null) {
             head = newNode;
             tail = newNode;
-        }else{
+        } else {
             tail.next = newNode;
             newNode.prev = tail;
             tail = newNode;
         }
-        tasks.put(task.getId(),newNode);
+        tasks.put(task.getId(), newNode);
     }
 
-    public List<Task> getTasks(){
+    public List<Task> getTasks() {
         List<Task> tasksL = new ArrayList<>();
         Node<Task> current = head;
-        while(current != null){
+        while (current != null) {
             tasksL.add(current.data);
             current = current.next;
         }

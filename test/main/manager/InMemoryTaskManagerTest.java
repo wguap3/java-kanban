@@ -91,17 +91,18 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testRemovedSubtaskDoesNotStoreOldId(){
+    void testRemovedSubtaskDoesNotStoreOldId() {
         Epic epic = new Epic("Test Epic", "Description of test epic", null, null);
         int epicId = taskManager.addEpic(epic);
         Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS);
         int subtaskId = taskManager.addSubtask(subtask1);
         taskManager.removeSubtask(subtaskId);
-        assertNull(taskManager.getIdSubtask(subtaskId),"Подзадача должна быть удалена и недоступна по старому ID.");
-        assertFalse(epic.getSubtaskIds().contains(subtaskId),"Эпик не должен хранить старый ID удаленной подзадачи.");
+        assertNull(taskManager.getIdSubtask(subtaskId), "Подзадача должна быть удалена и недоступна по старому ID.");
+        assertFalse(epic.getSubtaskIds().contains(subtaskId), "Эпик не должен хранить старый ID удаленной подзадачи.");
     }
+
     @Test
-    void testTaskFieldChangeAffectsManager(){
+    void testTaskFieldChangeAffectsManager() {
         Task task = new Task("Test Task", "Description of test task", null, TaskStatus.NEW);
         taskManager.addTask(task);
 
@@ -109,9 +110,9 @@ class InMemoryTaskManagerTest {
         task.setName("Test Task Update");
         assertEquals("Test Task Update", task.getName(), "Название задачи должно быть 'Test Task Update'.");
 
-        assertEquals("Description of test task",task.getDescribe(),"Описание задачи должно быть 'Description of test task'.");
+        assertEquals("Description of test task", task.getDescribe(), "Описание задачи должно быть 'Description of test task'.");
         task.setDescribe("Description of test task Update");
-        assertEquals("Description of test task Update",task.getDescribe(),"Описание задачи должно быть 'Description of test task Update'.");
+        assertEquals("Description of test task Update", task.getDescribe(), "Описание задачи должно быть 'Description of test task Update'.");
 
         assertEquals(1, task.getId(), "Id задачи должно быть = 1.");
         task.setId(14);
@@ -121,7 +122,6 @@ class InMemoryTaskManagerTest {
         task.setStatus(TaskStatus.DONE);
         assertEquals(TaskStatus.DONE, task.getStatus(), "Статус задачи должен быть 'DONE'.");
     }
-
 
 
 }

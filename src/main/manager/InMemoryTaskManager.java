@@ -40,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.put(id, subtask);
 
         epic.addSubtaskId(subtask.getId());
-            updateStatus(epicId);
+        updateStatus(epicId);
         return id;
     }
 
@@ -170,7 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epic.setSubtaskIds(savedEpic.getSubtaskIds());
         epic.setStatus(savedEpic.getStatus());
-        epics.put(epic.getId(),epic);
+        epics.put(epic.getId(), epic);
 
     }
 
