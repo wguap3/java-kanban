@@ -1,9 +1,5 @@
 package main.task;
 
-import main.manager.HistoryManager;
-import main.manager.Managers;
-import main.manager.TaskManager;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {
