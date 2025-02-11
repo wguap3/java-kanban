@@ -6,7 +6,7 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> historyStorage = new ArrayList<>();
+
     private final Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
@@ -20,8 +20,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         linkLast(task);
         history.put(task.getId(), tail);
 
-        historyStorage.clear();
-        historyStorage.addAll(getTasks());
     }
 
     @Override
