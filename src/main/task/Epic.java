@@ -1,9 +1,5 @@
 package main.task;
 
-import main.manager.HistoryManager;
-import main.manager.Managers;
-import main.manager.TaskManager;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -31,7 +27,9 @@ public class Epic extends Task {
     }
 
     public void removeSubtask(int subtaskId) {
-        subtaskIds.remove(subtaskId);
+        if (subtaskIds.contains(subtaskId)) {
+            subtaskIds.remove(Integer.valueOf(subtaskId)); // Удаляем по значению
+        }
     }
 
     public void cleanSubtaskIds() {
