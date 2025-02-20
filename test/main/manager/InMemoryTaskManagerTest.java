@@ -122,6 +122,4 @@ class InMemoryTaskManagerTest {
         task.setStatus(TaskStatus.DONE);
         assertEquals(TaskStatus.DONE, task.getStatus(), "Статус задачи должен быть 'DONE'.");
     }
-
-
 }
