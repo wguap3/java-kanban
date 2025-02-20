@@ -51,13 +51,13 @@ public class Task {
         this.describe = describe;
     }
 
-    public TaskType getType(){
+    public TaskType getType() {
         return TaskType.TASK;
     }
 
     @Override
     public String toString() {
-        return String.format("%d,%s,%s,%s,%s,", id,getType(),name,status,describe);
+        return String.format("%d,%s,%s,%s,%s,", id, getType(), name, status, describe);
     }
 
     @Override
@@ -66,10 +66,7 @@ public class Task {
         if (obj == null) return false;
         if (this.getClass() != obj.getClass()) return false;
         Task otherTask = (Task) obj;
-        return Objects.equals(name, otherTask.name) &&
-                Objects.equals(describe, otherTask.describe) &&
-                Objects.equals(id, otherTask.id) &&
-                Objects.equals(status, otherTask.status);
+        return Objects.equals(name, otherTask.name) && Objects.equals(describe, otherTask.describe) && Objects.equals(id, otherTask.id) && Objects.equals(status, otherTask.status);
     }
 
     @Override
