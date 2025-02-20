@@ -5,8 +5,7 @@ import main.task.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
-
+    
     private final Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
@@ -71,5 +70,4 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = node.prev;
         }
     }
-
 }
