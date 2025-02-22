@@ -32,6 +32,10 @@ public class Epic extends Task {
         }
     }
 
+    public TaskType getType() {
+        return TaskType.EPIC;
+    }
+
     public void cleanSubtaskIds() {
         subtaskIds.clear();
     }

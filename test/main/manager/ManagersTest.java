@@ -13,5 +13,4 @@ class ManagersTest {
         assertNotNull(historyManager, "Утилитарный класс должен возвращать инициализированный экземпляр HistoryManager.");
         assertNotNull(taskManager, "Утилитарный класс должен возвращать инициализированный экземпляр TaskManager.");
     }
-
 }

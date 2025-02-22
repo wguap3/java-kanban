@@ -12,10 +12,14 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int count = 0;
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistoryManager();
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     @Override
     public Integer addTask(Task task) {
@@ -30,9 +34,11 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtask.getEpicId();
         Epic epic = epics.get(epicId);
         if (epic == null) {
+            System.out.println("Эпик с ID " + epicId + " не найден.");
             return null;
         }
         if (subtask.getId() != null && subtask.getId() == epicId) {
+            System.out.println("Сабтаск с ID " + subtask.getId() + " уже существует.");
             return null;
         }
         int id = generateId();
@@ -192,12 +198,12 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private int generateId() {
+    protected int generateId() {
         count++;
         return count;
     }
 
-    private void updateStatus(int epicId) {
+    protected void updateStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) {
             return;

@@ -51,6 +51,10 @@ public class Task {
         this.describe = describe;
     }
 
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -67,10 +71,7 @@ public class Task {
         if (obj == null) return false;
         if (this.getClass() != obj.getClass()) return false;
         Task otherTask = (Task) obj;
-        return Objects.equals(name, otherTask.name) &&
-                Objects.equals(describe, otherTask.describe) &&
-                Objects.equals(id, otherTask.id) &&
-                Objects.equals(status, otherTask.status);
+        return Objects.equals(name, otherTask.name) && Objects.equals(describe, otherTask.describe) && Objects.equals(id, otherTask.id) && Objects.equals(status, otherTask.status);
     }
 
     @Override
