@@ -57,7 +57,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.format("%d,%s,%s,%s,%s,", id, getType(), name, status, describe);
+        return "Task{" +
+                "name='" + name + '\'' +
+                ", describe='" + describe + '\'' +
+                ", id=" + id +
+                ", status=" + status +
+                '}';
     }
 
     @Override
