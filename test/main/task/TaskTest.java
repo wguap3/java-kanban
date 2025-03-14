@@ -3,6 +3,8 @@ package main.task;
 import main.manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +14,7 @@ class TaskTest {
 
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", null, TaskStatus.NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
         final int id = taskManager.addTask(task);
         final Task savedTask = taskManager.getIdTask(id);
         assertNotNull(savedTask, "Задача не найдена.");
