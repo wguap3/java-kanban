@@ -1,45 +1,30 @@
 package main.manager;
 
+import main.exception.IntersectionTimeException;
 import main.exception.ManagerSaveException;
-import main.task.*;
+import main.formatter.FormatterUtil;
+import main.task.Epic;
+import main.task.Subtask;
+import main.task.Task;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final File file;
-    private static final String HEADER = "id,type,name,status,description,epic";
+    private static final String HEADER = "id,type,name,status,description,epic,duration,startTime,endTime";
+    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public FileBackedTaskManager(File file) {
         this.file = new File(file.getAbsolutePath());
     }
 
-    public static String toString(Task task) {
-        return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," + task.getDescribe() + "," + (task.getType().equals(TaskType.SUBTASK) ? ((Subtask) task).getEpicId() : "");
-    }
-
-    public static Task fromString(String line) {
-        String[] fields = line.split(",");
-        Integer id = Integer.parseInt(fields[0]);
-        String type = fields[1];
-        String name = fields[2];
-        TaskStatus status = TaskStatus.valueOf(fields[3]);
-        String describe = fields[4];
-
-        switch (type) {
-            case "TASK":
-                return new Task(name, describe, id, status);
-            case "EPIC":
-                return new Epic(name, describe, id, status);
-            case "SUBTASK":
-                int epicId = Integer.parseInt(fields[5]);
-                return new Subtask(name, describe, id, epicId, status);
-            default:
-                throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
-        }
-    }
 
     public void save() {
         try {
@@ -51,23 +36,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 writer.newLine();
                 for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
                     final Task task = entry.getValue();
-                    writer.write(toString(task));
+                    writer.write(FormatterUtil.toString(task));
                     writer.newLine();
                 }
                 for (Map.Entry<Integer, Epic> entry : epics.entrySet()) {
                     final Epic epic = entry.getValue();
-                    writer.write(toString(epic));
+                    writer.write(FormatterUtil.toString(epic));
                     writer.newLine();
                 }
                 for (Map.Entry<Integer, Subtask> entry : subtasks.entrySet()) {
                     final Subtask subtask = entry.getValue();
-                    writer.write(toString(subtask));
+                    writer.write(FormatterUtil.toString(subtask));
                     writer.newLine();
                 }
 
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Can't save to file: " + file.getName(), e);
+            throw new ManagerSaveException("Невозможно сохранить в файл:" + file.getName(), e);
         }
     }
 
@@ -98,7 +83,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 if (line.isEmpty()) {
                     break;
                 }
-                final Task task = fromString(line);
+                final Task task = FormatterUtil.fromString(line, taskManager);
                 final int id = task.getId();
                 if (id > generatorId) {
                     generatorId = id;
@@ -118,19 +103,57 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return taskManager;
     }
 
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
+
+    public boolean isTasksOverlap(Task task1, Task task2) {
+        if (task1.getStartTime() == null || task2.getStartTime() == null) {
+            return false;
+        }
+        LocalDateTime start1 = task1.getStartTime();
+        LocalDateTime start2 = task2.getStartTime();
+        LocalDateTime end1 = task1.getEndTime();
+        LocalDateTime end2 = task2.getEndTime();
+        return start1.isBefore(end2) && start2.isBefore(end1);
+    }
+
+    public void validateTaskOverlap(Task newTask) {
+        if (newTask.getStartTime() == null) {
+            return;
+        }
+
+        for (Task existingTask : prioritizedTasks) {
+            if (isTasksOverlap(newTask, existingTask)) {
+                throw new IntersectionTimeException("Задача пересекается по времени с другой задачей.");
+            }
+        }
+    }
+
+
     @Override
     public Integer addTask(Task task) {
+        validateTaskOverlap(task);
         int id = super.addTask(task);
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
         save();
         return id;
     }
 
     @Override
     public Integer addSubtask(Subtask subtask) {
+        validateTaskOverlap(subtask);
         int id = super.addSubtask(subtask);
+
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
+        }
         save();
         return id;
     }
+
 
     @Override
     public Integer addEpic(Epic epic) {
@@ -142,12 +165,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public void removeTask(int id) {
         super.removeTask(id);
+        Task taskToRemove = tasks.get(id);
+        if (taskToRemove != null) {
+            prioritizedTasks.remove(taskToRemove);
+        }
         save();
     }
 
     @Override
     public void removeSubtask(int id) {
         super.removeSubtask(id);
+        Subtask subtaskToRemove = subtasks.get(id);
+        if (subtaskToRemove != null) {
+            prioritizedTasks.remove(subtaskToRemove);
+        }
         save();
     }
 

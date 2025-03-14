@@ -1,5 +1,7 @@
 package main.task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,13 +9,19 @@ public class Task {
     private String describe;
     private Integer id;
     private TaskStatus status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
-    public Task(String name, String describe, Integer id, TaskStatus status) {
+
+    public Task(String name, String describe, Integer id, TaskStatus status, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.describe = describe;
         this.id = id;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
+
 
     public String getName() {
         return name;
@@ -51,6 +59,29 @@ public class Task {
         this.describe = describe;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (duration == null || startTime == null) {
+            return null;
+        }
+        return startTime.plus(duration);
+    }
+
     public TaskType getType() {
         return TaskType.TASK;
     }
@@ -62,6 +93,9 @@ public class Task {
                 ", describe='" + describe + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                ", endTime=" + getEndTime() +
                 '}';
     }
 
@@ -92,7 +126,7 @@ public class Task {
         }
         hash = hash * 31;
 
-        if (id != null) {
+        if (status != null) {
             hash = hash + status.hashCode();
         }
         return hash;

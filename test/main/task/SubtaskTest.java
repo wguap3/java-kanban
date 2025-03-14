@@ -3,6 +3,8 @@ package main.task;
 import main.manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +17,7 @@ class SubtaskTest {
     void addNewSubtask() {
         Epic epic1 = new Epic("Test addNewSubtask epic", "Test addNewSubtask description epic", null, null);
         taskManager.addEpic(epic1);
-        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", null, epic1.getId(), TaskStatus.IN_PROGRESS);
+        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", null, epic1.getId(), TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
         final int id = taskManager.addSubtask(subtask);
         final Subtask savedSubtask = taskManager.getIdSubtask(id);
         assertNotNull(savedSubtask, "Подзадача не найдена.");
@@ -30,7 +32,7 @@ class SubtaskTest {
     void addSubtasksInEpic() {
         Epic epic1 = new Epic("Test addSubtasksInEpic epic", "Test addSubtasksInEpic description epic", null, null);
         taskManager.addEpic(epic1);
-        Subtask subtask = new Subtask("Test addSubtasksInEpic", "Test addSubtasksInEpic description", epic1.getId(), epic1.getId(), TaskStatus.IN_PROGRESS);
+        Subtask subtask = new Subtask("Test addSubtasksInEpic", "Test addSubtasksInEpic description", epic1.getId(), epic1.getId(), TaskStatus.IN_PROGRESS,Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
         Integer result = taskManager.addSubtask(subtask);
         assertNull(result, "Объект Subtask нельзя сделать своим же эпиком.");
     }

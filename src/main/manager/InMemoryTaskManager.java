@@ -5,10 +5,8 @@ import main.task.Subtask;
 import main.task.Task;
 import main.task.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private int count = 0;
@@ -34,11 +32,9 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtask.getEpicId();
         Epic epic = epics.get(epicId);
         if (epic == null) {
-            System.out.println("Эпик с ID " + epicId + " не найден.");
             return null;
         }
         if (subtask.getId() != null && subtask.getId() == epicId) {
-            System.out.println("Сабтаск с ID " + subtask.getId() + " уже существует.");
             return null;
         }
         int id = generateId();
@@ -65,10 +61,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllSubtask() {
-        for (Epic epic : epics.values()) {
+
+        epics.values().forEach(epic -> {
             epic.cleanSubtaskIds();
             updateStatus(epic.getId());
-        }
+        });
         subtasks.clear();
     }
 
@@ -101,10 +98,10 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.remove(id);
         historyManager.remove(id);
         if (epic != null) {
-            for (int subtaskId : epic.getSubtaskIds()) {
+            epic.getSubtaskIds().forEach(subtaskId -> {
                 subtasks.remove(subtaskId);
                 historyManager.remove(subtaskId);
-            }
+            });
         }
     }
 
@@ -182,15 +179,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Subtask> getSubtaskOfEpic(int epicId) {
-        ArrayList<Subtask> listSub = new ArrayList<>();
         Epic epic = epics.get(epicId);
-        if (epic != null) {
-            for (int id : epic.getSubtaskIds()) {
-                Subtask subtask = subtasks.get(id);
-                listSub.add(subtask);
-            }
+
+        if (epic == null) {
+            return new ArrayList<>();
         }
-        return listSub;
+        return epic.getSubtaskIds().stream()
+                .map(subtasks::get)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -213,25 +209,20 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(TaskStatus.NEW);
             return;
         }
-        boolean allDone = false;
-        boolean inProgress = false;
-        boolean isNew = false;
-        for (int subId : subtaskId) {
-            Subtask subtask = getIdSubtask(subId);
-            if (subtask != null) {
-                if (subtask.getStatus() == TaskStatus.IN_PROGRESS) {
-                    inProgress = true;
-                }
+        boolean allDone = subtaskId.stream()
+                .map(this::getIdSubtask)
+                .filter(Objects::nonNull)
+                .anyMatch(subtask -> subtask.getStatus() == TaskStatus.DONE);
+        boolean inProgress = subtaskId.stream()
+                .map(this::getIdSubtask)
+                .filter(Objects::nonNull)
+                .anyMatch(subtask -> subtask.getStatus() == TaskStatus.IN_PROGRESS);
 
-                if (subtask.getStatus() == TaskStatus.DONE) {
-                    allDone = true;
-                }
-                if (subtask.getStatus() == TaskStatus.NEW) {
-                    isNew = true;
-                }
+        boolean isNew = subtaskId.stream()
+                .map(this::getIdSubtask)
+                .filter(Objects::nonNull)
+                .anyMatch(subtask -> subtask.getStatus() == TaskStatus.NEW);
 
-            }
-        }
 
         if (allDone && !inProgress && !isNew) {
             epic.setStatus(TaskStatus.DONE);
