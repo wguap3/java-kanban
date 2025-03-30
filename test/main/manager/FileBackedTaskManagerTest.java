@@ -1,6 +1,7 @@
 package main.manager;
 
 import main.exception.IntersectionTimeException;
+import main.exception.NotFoundException;
 import main.task.Epic;
 import main.task.Subtask;
 import main.task.Task;
@@ -107,7 +108,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         Subtask subtask = new Subtask("Subtask 1", "Description", null, epicId, TaskStatus.NEW, Duration.ofDays(3), LocalDateTime.of(2022, 2, 2, 2, 2));
         int subtaskId = taskManager.addSubtask(subtask);
         taskManager.removeSubtask(subtaskId);
-        assertNull(taskManager.getIdSubtask(subtaskId), "Подзадача не удалена.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdSubtask(subtaskId),
+                "Задача не удалена.");
     }
 
     @Test
@@ -115,7 +117,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         Epic epic = new Epic("Epic 1", "Description", null, TaskStatus.NEW, taskManager);
         int epicId = taskManager.addEpic(epic);
         taskManager.removeEpic(epicId);
-        assertNull(taskManager.getIdEpic(epicId), "Эпик не удален.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdEpic(epicId),
+                "Эпик не удален.");
     }
 
     @Test

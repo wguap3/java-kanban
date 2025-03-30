@@ -106,12 +106,12 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtask == null) {
             throw new NotFoundException("Подзадачи с таким ID не существует.");
         }
+        int epicId = subtask.getEpicId();
+        Epic epic = epics.get(epicId);
         subtasks.remove(id);
         prioritizedTasks.remove(subtask);
         historyManager.remove(id);
 
-        int epicId = subtask.getEpicId();
-        Epic epic = epics.get(epicId);
         if (epic == null) {
             throw new NotFoundException("Эпик для подзадачи не найден.");
         }

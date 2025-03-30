@@ -129,13 +129,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public void removeTask(int id) {
         super.removeTask(id);
+        Task taskToRemove = tasks.get(id);
+        if (taskToRemove != null) {
+            prioritizedTasks.remove(taskToRemove);
+        }
         save();
     }
 
     @Override
     public void removeSubtask(int id) {
         super.removeSubtask(id);
-
+        Subtask subtaskToRemove = subtasks.get(id);
+        if (subtaskToRemove != null) {
+            prioritizedTasks.remove(subtaskToRemove);
+        }
         save();
     }
 

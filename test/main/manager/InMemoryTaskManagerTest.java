@@ -1,5 +1,6 @@
 package main.manager;
 
+import main.exception.NotFoundException;
 import main.task.Epic;
 import main.task.Subtask;
 import main.task.Task;
@@ -45,7 +46,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     void testTaskIdConflict() {
         Task task1 = new Task("Task 1", "Description of task 1", 1, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         taskManager.addTask(task1);
-        Task task2 = new Task("Task 2", "Description of task 2", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
+        Task task2 = new Task("Task 2", "Description of task 2", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2022, 1, 1, 0, 0));
         taskManager.addTask(task2);
         int id3 = task2.getId();
         Task foundTask1 = taskManager.getIdTask(1);
@@ -77,8 +78,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int subtaskId = taskManager.addSubtask(subtask1);
         taskManager.removeSubtask(subtaskId);
-        Subtask foundSubtask = taskManager.getIdSubtask(subtaskId);
-        assertNull(foundSubtask, "Подзадача должна быть удалена и недоступна по старому ID.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdSubtask(subtaskId),
+                "Подзадача должна быть удалена и недоступна по старому ID.");
     }
 
     @Test
@@ -88,7 +89,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int subtaskId = taskManager.addSubtask(subtask1);
         taskManager.removeSubtask(subtaskId);
-        assertNull(taskManager.getIdSubtask(subtaskId), "Подзадача должна быть удалена и недоступна по старому ID.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdSubtask(subtaskId),
+                "Подзадача должна быть удалена и недоступна по старому ID.");
         assertFalse(epic.getSubtaskIds().contains(subtaskId), "Эпик не должен хранить старый ID удаленной подзадачи.");
     }
 
@@ -135,6 +137,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Epic epic = new Epic("Epic 1", "Description", null, TaskStatus.NEW);
         int epicId = taskManager.addEpic(epic);
         taskManager.removeEpic(epicId);
-        assertNull(taskManager.getIdEpic(epicId), "Эпик не удален.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdEpic(epicId),
+                "Эпик не удален.");
+
     }
 }

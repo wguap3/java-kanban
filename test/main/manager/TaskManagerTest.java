@@ -1,5 +1,6 @@
 package main.manager;
 
+import main.exception.NotFoundException;
 import main.task.Task;
 import main.task.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Task task = new Task("Task 1", "Description", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int taskId = taskManager.addTask(task);
         taskManager.removeTask(taskId);
-        assertNull(taskManager.getIdTask(taskId), "Задача не удалена.");
+        assertThrows(NotFoundException.class, () -> taskManager.getIdTask(taskId),
+                "Задача не удалена.");
     }
 
     @Test
