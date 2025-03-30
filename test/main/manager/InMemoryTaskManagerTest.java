@@ -12,16 +12,17 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @BeforeEach
     @Override
     void setUp() {
         taskManager = new InMemoryTaskManager();
     }
+
     @Test
     void testAddAndFindTaskById() {
-        Task task = new Task("Test Task", "Description of test task", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task task = new Task("Test Task", "Description of test task", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int taskId = taskManager.addTask(task);
         Task foundTask = taskManager.getIdTask(taskId);
         assertNotNull(foundTask, "Задача должна быть найдена по ID.");
@@ -40,12 +41,11 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
     }
 
 
-
     @Test
     void testTaskIdConflict() {
-        Task task1 = new Task("Task 1", "Description of task 1", 1, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task task1 = new Task("Task 1", "Description of task 1", 1, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         taskManager.addTask(task1);
-        Task task2 = new Task("Task 2", "Description of task 2", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task task2 = new Task("Task 2", "Description of task 2", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         taskManager.addTask(task2);
         int id3 = task2.getId();
         Task foundTask1 = taskManager.getIdTask(1);
@@ -58,7 +58,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
 
     @Test
     void testTaskImmutabilityOnAdd() {
-        Task originalTask = new Task("Test Task", "Description of test task", 5, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task originalTask = new Task("Test Task", "Description of test task", 5, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         String originalName = originalTask.getName();
         String originalDescription = originalTask.getDescribe();
         TaskStatus originalStatus = originalTask.getStatus();
@@ -74,7 +74,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
     void testRemoveSubtask() {
         Epic epic = new Epic("Test Epic", "Description of test epic", null, null);
         int epicId = taskManager.addEpic(epic);
-        Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int subtaskId = taskManager.addSubtask(subtask1);
         taskManager.removeSubtask(subtaskId);
         Subtask foundSubtask = taskManager.getIdSubtask(subtaskId);
@@ -85,7 +85,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
     void testRemovedSubtaskDoesNotStoreOldId() {
         Epic epic = new Epic("Test Epic", "Description of test epic", null, null);
         int epicId = taskManager.addEpic(epic);
-        Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Subtask subtask1 = new Subtask("Test Subtask1", "Description of test subtask1", null, epicId, TaskStatus.IN_PROGRESS, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         int subtaskId = taskManager.addSubtask(subtask1);
         taskManager.removeSubtask(subtaskId);
         assertNull(taskManager.getIdSubtask(subtaskId), "Подзадача должна быть удалена и недоступна по старому ID.");
@@ -94,7 +94,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
 
     @Test
     void testTaskFieldChangeAffectsManager() {
-        Task task = new Task("Test Task", "Description of test task", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task task = new Task("Test Task", "Description of test task", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         taskManager.addTask(task);
 
         assertEquals("Test Task", task.getName(), "Название задачи должно быть 'Test Task'.");
@@ -115,24 +115,24 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
     }
 
     @Test
-    void testAddSubtask(){
-        Epic epic = new Epic("Epic 1", "Description",null, TaskStatus.NEW);
+    void testAddSubtask() {
+        Epic epic = new Epic("Epic 1", "Description", null, TaskStatus.NEW);
         int epicId = taskManager.addEpic(epic);
-        Subtask subtask = new Subtask("Subtask 1", "Description", null,epicId, TaskStatus.NEW,Duration.ofDays(4),LocalDateTime.of(2023,1,1,1,1));
+        Subtask subtask = new Subtask("Subtask 1", "Description", null, epicId, TaskStatus.NEW, Duration.ofDays(4), LocalDateTime.of(2023, 1, 1, 1, 1));
         int subtaskId = taskManager.addSubtask(subtask);
         assertNotNull(taskManager.getIdSubtask(subtaskId), "Подзадача не добавлена.");
     }
 
     @Test
     public void testAddEpic() {
-        Epic epic = new Epic("Epic 1", "Description", null,TaskStatus.NEW);
+        Epic epic = new Epic("Epic 1", "Description", null, TaskStatus.NEW);
         int epicId = taskManager.addEpic(epic);
         assertNotNull(taskManager.getIdEpic(epicId), "Эпик не добавлен.");
     }
 
     @Test
     public void testRemoveEpic() {
-        Epic epic = new Epic("Epic 1", "Description", null,TaskStatus.NEW);
+        Epic epic = new Epic("Epic 1", "Description", null, TaskStatus.NEW);
         int epicId = taskManager.addEpic(epic);
         taskManager.removeEpic(epicId);
         assertNull(taskManager.getIdEpic(epicId), "Эпик не удален.");

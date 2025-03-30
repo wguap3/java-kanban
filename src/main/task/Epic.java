@@ -1,6 +1,6 @@
 package main.task;
 
-import main.manager.InMemoryTaskManager;
+import main.manager.TaskManager;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Epic extends Task {
     private ArrayList<Integer> subtaskIds = new ArrayList<>();
     private LocalDateTime endTime;
-    private InMemoryTaskManager taskManager;
+    private TaskManager taskManager;
 
     public Epic(String name, String describe, Integer id, TaskStatus status) {
         super(name, describe, id, null, null, null);
@@ -19,8 +19,12 @@ public class Epic extends Task {
         super(name, describe, id, null, duration, localDateTime);
     }
 
-    public Epic(String name, String describe, Integer id, TaskStatus status, InMemoryTaskManager taskManager) {
+    public Epic(String name, String describe, Integer id, TaskStatus status, TaskManager taskManager) {
         super(name, describe, id, status, null, null);
+        this.taskManager = taskManager;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -30,7 +34,7 @@ public class Epic extends Task {
 
     @Override
     public Duration getDuration() {
-        if (subtaskIds.isEmpty()) {
+        if (taskManager == null || subtaskIds.isEmpty()) {
             return Duration.ZERO;
         }
         return subtaskIds.stream()
@@ -43,6 +47,9 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getStartTime() {
+        if (taskManager == null) {
+            return null;
+        }
         return subtaskIds.stream()
                 .map(taskManager::getIdSubtask)
                 .filter(subtask -> subtask != null)
@@ -54,6 +61,9 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
+        if (taskManager == null) {
+            return null;
+        }
         return subtaskIds.stream()
                 .map(taskManager::getIdSubtask)
                 .filter(subtask -> subtask != null)

@@ -7,14 +7,15 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TaskTest {
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021,1,1,0,0));
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, TaskStatus.NEW, Duration.ofHours(3), LocalDateTime.of(2021, 1, 1, 0, 0));
         final int id = taskManager.addTask(task);
         final Task savedTask = taskManager.getIdTask(id);
         assertNotNull(savedTask, "Задача не найдена.");

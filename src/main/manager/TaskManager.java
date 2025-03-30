@@ -1,5 +1,6 @@
 package main.manager;
 
+import main.exception.NotFoundException;
 import main.task.Epic;
 import main.task.Subtask;
 import main.task.Task;
@@ -20,7 +21,7 @@ public interface TaskManager {
 
     void removeAllEpic();
 
-    void removeTask(int id);
+    void removeTask(int id) throws NotFoundException;
 
     void removeSubtask(int id);
 
@@ -41,4 +42,12 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtaskOfEpic(int epicId);
 
     List<Task> getHistory();
+
+    ArrayList<Task> getAllTasks();
+
+    ArrayList<Subtask> getAllSubtask();
+
+    ArrayList<Epic> getAllEpic();
+
+    List<Task> getPrioritizedTasks();
 }
