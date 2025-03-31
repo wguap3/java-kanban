@@ -24,13 +24,13 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         System.out.println("Началась обработка " + method + " /tasks запроса от клиента.");
         switch (method) {
-            case "GET":
+            case GET_STATUS:
                 handleGetTasks(httpExchange);
                 break;
-            case "POST":
+            case POST_STATUS:
                 handlePostTasks(httpExchange);
                 break;
-            case "DELETE":
+            case DELETE_STATUS:
                 handleDeleteTasks(httpExchange);
                 break;
             default:

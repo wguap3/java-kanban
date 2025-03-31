@@ -18,13 +18,12 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         System.out.println("Началась обработка " + method + " /prioritized запроса от клиента.");
         switch (method) {
-            case "GET":
+            case GET_STATUS:
                 handleGetPrioritized(httpExchange);
                 break;
             default:
                 sendText(httpExchange, "Некорректный метод!", 400);
         }
-
     }
 
     private void handleGetPrioritized(HttpExchange exchange) throws IOException {
@@ -39,7 +38,5 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
         } else {
             sendNotFound(exchange);
         }
-
     }
-
 }

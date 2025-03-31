@@ -25,13 +25,13 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         System.out.println("Началась обработка " + method + " /subtasks запроса от клиента.");
         switch (method) {
-            case "GET":
+            case GET_STATUS:
                 handleGetSubtasks(httpExchange);
                 break;
-            case "POST":
+            case POST_STATUS:
                 handlePostSubtasks(httpExchange);
                 break;
-            case "DELETE":
+            case DELETE_STATUS:
                 handleDeleteSubtasks(httpExchange);
                 break;
             default:

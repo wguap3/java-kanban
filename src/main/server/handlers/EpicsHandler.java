@@ -24,19 +24,18 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         System.out.println("Началась обработка " + method + " /epics запроса от клиента.");
         switch (method) {
-            case "GET":
+            case GET_STATUS:
                 handleGetEpics(httpExchange);
                 break;
-            case "POST":
+            case POST_STATUS:
                 handlePostEpics(httpExchange);
                 break;
-            case "DELETE":
+            case DELETE_STATUS:
                 handleDeleteEpics(httpExchange);
                 break;
             default:
                 sendText(httpExchange, "Некорректный метод!", 400);
         }
-
     }
 
     private void handleGetEpics(HttpExchange exchange) throws IOException {

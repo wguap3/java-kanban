@@ -18,13 +18,12 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         System.out.println("Началась обработка " + method + " /history запроса от клиента.");
         switch (method) {
-            case "GET":
+            case GET_STATUS:
                 handleGetHistory(httpExchange);
                 break;
             default:
                 sendText(httpExchange, "Некорректный метод!", 400);
         }
-
     }
 
     private void handleGetHistory(HttpExchange exchange) throws IOException {
@@ -39,7 +38,5 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
         } else {
             sendNotFound(exchange);
         }
-
     }
-
 }
