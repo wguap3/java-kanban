@@ -1,4 +1,4 @@
-package main.formatter;
+package main.util;
 
 import main.manager.InMemoryTaskManager;
 import main.task.*;

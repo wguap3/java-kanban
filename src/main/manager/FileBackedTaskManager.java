@@ -1,19 +1,19 @@
 package main.manager;
 
-import main.exception.IntersectionTimeException;
 import main.exception.ManagerSaveException;
-import main.formatter.FormatterUtil;
 import main.task.Epic;
 import main.task.Subtask;
 import main.task.Task;
+import main.util.FormatterUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeSet;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -103,53 +103,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return taskManager;
     }
 
-    public List<Task> getPrioritizedTasks() {
-        return new ArrayList<>(prioritizedTasks);
-    }
-
-    public boolean isTasksOverlap(Task task1, Task task2) {
-        if (task1.getStartTime() == null || task2.getStartTime() == null) {
-            return false;
-        }
-        LocalDateTime start1 = task1.getStartTime();
-        LocalDateTime start2 = task2.getStartTime();
-        LocalDateTime end1 = task1.getEndTime();
-        LocalDateTime end2 = task2.getEndTime();
-        return start1.isBefore(end2) && start2.isBefore(end1);
-    }
-
-    public void validateTaskOverlap(Task newTask) {
-        if (newTask.getStartTime() == null) {
-            return;
-        }
-
-        for (Task existingTask : prioritizedTasks) {
-            if (isTasksOverlap(newTask, existingTask)) {
-                throw new IntersectionTimeException("Задача пересекается по времени с другой задачей.");
-            }
-        }
-    }
-
 
     @Override
     public Integer addTask(Task task) {
-        validateTaskOverlap(task);
         int id = super.addTask(task);
-        if (task.getStartTime() != null) {
-            prioritizedTasks.add(task);
-        }
         save();
         return id;
     }
 
     @Override
     public Integer addSubtask(Subtask subtask) {
-        validateTaskOverlap(subtask);
         int id = super.addSubtask(subtask);
-
-        if (subtask.getStartTime() != null) {
-            prioritizedTasks.add(subtask);
-        }
         save();
         return id;
     }
