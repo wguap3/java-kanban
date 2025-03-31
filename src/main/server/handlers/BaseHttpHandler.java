@@ -14,9 +14,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class BaseHttpHandler {
-    protected final static String GET_STATUS = "GET";
-    protected final static String POST_STATUS = "POST";
-    protected final static String DELETE_STATUS = "DELETE";
+    protected static final String GET_STATUS = "GET";
+    protected static final String POST_STATUS = "POST";
+    protected static final String DELETE_STATUS = "DELETE";
     protected Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
